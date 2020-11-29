@@ -8,7 +8,8 @@ namespace Shop.Core.Models
 {
     public class Order : BaseEntity
     {
-        public Order () {
+        public Order()
+        {
             this.OrderItems = new List<OrderItem>();
         }
         public string FirstName { get; set; }

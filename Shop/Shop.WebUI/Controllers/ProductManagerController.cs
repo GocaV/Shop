@@ -9,14 +9,15 @@ using Shop.Core.Models;
 using Shop.Core.ViewModels;
 using Shop.DataAccess.InMemory;
 
-namespace Shop.WebUI.Controllers
+namespace MyShop.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
         IRepository<Product> context;
         IRepository<ProductCategory> productCategories;
 
-        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext ) {
+        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext)
+        {
             context = productContext;
             productCategories = productCategoryContext;
         }
@@ -26,7 +27,8 @@ namespace Shop.WebUI.Controllers
             List<Product> products = context.Collection().ToList();
             return View(products);
         }
-        public ActionResult Create() {
+        public ActionResult Create()
+        {
             ProductManagerViewModel viewModel = new ProductManagerViewModel();
 
             viewModel.Product = new Product();
@@ -34,13 +36,17 @@ namespace Shop.WebUI.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        public ActionResult Create(Product product, HttpPostedFileBase file) { 
-        if(!ModelState.IsValid) {
+        public ActionResult Create(Product product, HttpPostedFileBase file)
+        {
+            if (!ModelState.IsValid)
+            {
                 return View(product);
             }
-        else {
+            else
+            {
 
-                if (file != null){
+                if (file != null)
+                {
                     product.Image = product.Id + Path.GetExtension(file.FileName);
                     file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);
                 }
@@ -51,13 +57,16 @@ namespace Shop.WebUI.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public ActionResult Edit(string Id) {
+        public ActionResult Edit(string Id)
+        {
 
             Product product = context.Find(Id);
-            if(product==null) {
+            if (product == null)
+            {
                 return HttpNotFound();
             }
-            else {
+            else
+            {
                 ProductManagerViewModel viewModel = new ProductManagerViewModel();
                 viewModel.Product = product;
                 viewModel.ProductCategories = productCategories.Collection();
@@ -67,7 +76,8 @@ namespace Shop.WebUI.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file) {
+        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file)
+        {
             Product productToEdit = context.Find(Id);
             if (productToEdit == null)
             {
@@ -75,14 +85,16 @@ namespace Shop.WebUI.Controllers
             }
             else
             {
-                if(!ModelState.IsValid) {
+                if (!ModelState.IsValid)
+                {
                     return View(product);
                 }
 
-                if (file != null) {
+                if (file != null)
+                {
                     productToEdit.Image = product.Id + Path.GetExtension(file.FileName);
                     file.SaveAs(Server.MapPath("//Content//ProductImages//") + productToEdit.Image);
-                } 
+                }
 
                 productToEdit.Category = product.Category;
                 productToEdit.Description = product.Description;
@@ -95,31 +107,34 @@ namespace Shop.WebUI.Controllers
             }
         }
 
-        public ActionResult Delete(string Id) {
+        public ActionResult Delete(string Id)
+        {
             Product productToDelete = context.Find(Id);
             if (productToDelete == null)
             {
                 return HttpNotFound();
             }
-            else {
+            else
+            {
                 return View(productToDelete);
             }
         }
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(string Id) {
+        public ActionResult ConfirmDelete(string Id)
+        {
             Product productToDelete = context.Find(Id);
-                
-                if (productToDelete == null)
-                {
-                    return HttpNotFound();
-                }
-                else
-                {
-                    context.Delete(Id);
-                    context.Commit();
-                    return RedirectToAction("Index");
-                }
+
+            if (productToDelete == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                context.Delete(Id);
+                context.Commit();
+                return RedirectToAction("Index");
             }
         }
     }
+}

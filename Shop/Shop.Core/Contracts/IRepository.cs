@@ -1,8 +1,8 @@
 ﻿using Shop.Core.Models;
 using System.Linq;
 
-namespace Shop.Core.Contracts 
-{ 
+namespace Shop.Core.Contracts
+{
     public interface IRepository<T> where T : BaseEntity
     {
         IQueryable<T> Collection();
