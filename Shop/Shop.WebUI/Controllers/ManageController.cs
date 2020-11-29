@@ -18,6 +18,7 @@ namespace Shop.WebUI.Controllers
 
         public ManageController()
         {
+    
         }
 
         public ApplicationSignInManager SignInManager
